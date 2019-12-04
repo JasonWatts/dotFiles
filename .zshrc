@@ -110,6 +110,7 @@ alias sz='source ~/.zshrc'
 alias r='reset'
 alias e='exit'
 alias gs='git status'
+alias gpom='git push origin master'
 alias copy='copyfile'
 
 set -o vi
