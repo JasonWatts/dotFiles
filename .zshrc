@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/jason.watts/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -72,8 +72,20 @@ plugins=(git colored-man-pages gitfast history vscode aws copyfile)
 
 source $ZSH/oh-my-zsh.sh
 
-# User prompt configuration
-PROMPT="$fg[cyan]%}$USER ${PROMPT}"
+which git 1> /dev/null 2> /dev/null
+G_EXIST=$?
+if [[ 0 != $G_EXIST ]]; then
+	# Git isn't installed
+	echo "git not found. Please install git for display of git branch in prompt"
+	# User prompt configuration
+	PROMPT="$fg[cyan]%}$USER ${PROMPT}"
+else
+	# Git is installed
+	function parse_git_branch(){
+		git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+	}
+	PROMPT="$fg[cyan]%}$USER [$(parse_git_branch)] ${PROMPT}"
+fi
 
 # Create a new directory and enter it
 function mkd() {
